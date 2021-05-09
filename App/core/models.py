@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
 from django.conf import settings
 
 
-def recipe_image_file_path(instance, filename):
+def advisor_image_file_path(instance, filename):
     """Generate file path for new advisor image"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
@@ -51,9 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Advisor(models.Model):
-    """Advisor to be booked"""
+    """Advisor object to be booked"""
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to=recipe_image_file_path)
+    image = models.ImageField(upload_to=advisor_image_file_path)
     
     def __str__(self):
         return self.name 
+

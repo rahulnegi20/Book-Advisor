@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='advisor',
             name='image',
-            field=models.ImageField(upload_to=core.models.recipe_image_file_path),
+            field=models.ImageField(upload_to=core.models.advisor_image_file_path),
         ),
     ]

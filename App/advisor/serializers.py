@@ -10,4 +10,6 @@ class AdvisorSerializer(serializers.ModelSerializer):
         model = Advisor
         fields = ('id', 'name', 'image')
         read_only_fields = ('id',)
+        lookup_field = 'pk'
+        
         
