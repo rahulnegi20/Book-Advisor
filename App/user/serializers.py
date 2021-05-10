@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers 
+ 
+from core.models import Booking, Advisor, User
 
-from core.models import Booking
+from advisor.serializers import AdvisorSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users object/Register"""
@@ -45,26 +47,22 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 
-
-# class UserAuthenticateSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = get_user_model()
-#         fields = ('id','name','email', 'password')
-#         extra_kwargs = {'password': {'write_only':True, 'min_length': 5}}
-
-#     def create(self, validated_data):
-#         """Create a new user with encrypted password and return it"""
-#         return get_user_model().objects.create_user(**validated_data)
-
-
 class BookingSerializer(serializers.ModelSerializer):
     """Serialize Booking"""
 
+    # advisor = serializers.PrimaryKeyRelatedField(
+    #     many = False,
+    #     queryset = Advisor.objects.all()
+    # )
+    # user =  serializers.PrimaryKeyRelatedField(
+    #     many=False,
+    #     queryset = User.objects.all()
+    # )
+    date_time_field = serializers.DateTimeField()
 
     class Meta:
         model = Booking
-        fields = ('id', 'date_time_field')
+        fields = ('id','date_time_field')
         read_only_fields=('id',)
 
         def create(self, data):

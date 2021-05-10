@@ -66,9 +66,10 @@ class Booking(models.Model):
     )
     advisor = models.ForeignKey(
         Advisor,
-        on_delete = models.CASCADE
+        on_delete = models.CASCADE,
+        null = True
     )
-    date_time_field = models.DateTimeField(auto_now_add=True)
+    date_time_field = models.DateTimeField(auto_now_add=True, blank=False)
 
     def __str__(self):
         return "{}".format(self.date_time_field)

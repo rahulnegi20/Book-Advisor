@@ -20,6 +20,7 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.CreateuserView.as_view()),
     path('<int:user_id>/', include(router.urls)),
-    path('booking', views.BookingAPI.as_view())
+    path('<int:user_id>/advisor/<int:advisor_id>/', views.BookingAPIView.as_view()),
+   # path('booking/', views.BookingAPIView.as_view())
 ]
 

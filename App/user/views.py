@@ -8,11 +8,10 @@ from rest_framework import permissions
 from rest_framework.views import APIView 
 from django.shortcuts import get_object_or_404
 
-from advisor import serializers
-
+from advisor.serializers import AdvisorSerializer
 from user.serializers import UserSerializer, AuthTokenSerializer, BookingSerializer
 
-from core.models import Advisor, User
+from core.models import Advisor, User, Booking
 
 from rest_framework.response import Response
 
@@ -64,24 +63,34 @@ class UserViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class AdvisorListViewSet(viewsets.ModelViewSet, mixins.ListModelMixin):
+class AdvisorListViewSet(viewsets.ReadOnlyModelViewSet, mixins.ListModelMixin):
     """Lists the availabe advisors to the user"""
    # authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Advisor.objects.all()
-    serializer_class = serializers.AdvisorSerializer
+    serializer_class = AdvisorSerializer 
+    http_method_names = ['get', 'head']
     #lookup_field = 'user_id'
     #lookup_url_kwarg = 'pk'
 
 
     def get_queryset(self, **user_id):
         """Return objects for the current authenticated user only"""
-        return self.queryset.order_by('id')
+        return self.queryset.order_by('id') 
+
+    def get_booking(self):
+        pass
 
 
-class BookingAPI(generics.CreateAPIView):
-    authentication_classes = (TokenAuthentication,)
+class BookingAPIView(generics.CreateAPIView):
+    serializer_class = BookingSerializer
     permission_classes = (IsAuthenticated,)
-    serializers_class = BookingSerializer
+    queryset = Booking.objects.all()
 
-    # queryset = BookingSerializer.objects.all()
+    # def get_queryset(self, **pk):
+    #     advisor_id = self.advisor.id
+    #     return self.queryset.filter(pk=advisor_id)
+
+    def perform_create(self, serializer):
+        """save and post the data"""
+        serializer.save(user=self.request.user)
