@@ -58,3 +58,17 @@ class Advisor(models.Model):
     def __str__(self):
         return self.name 
 
+class Booking(models.Model):
+    """Booking the Advisor"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE
+    )
+    advisor = models.ForeignKey(
+        Advisor,
+        on_delete = models.CASCADE
+    )
+    date_time_field = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}".format(self.date_time_field)

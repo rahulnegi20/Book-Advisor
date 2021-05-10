@@ -3,9 +3,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers 
 
+from core.models import Booking
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the users object"""
+    """Serializer for the users object/Register"""
 
     class Meta:
         model = get_user_model()
@@ -18,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AuthTokenSerializer(serializers.Serializer):
-    """"Serializer for the user authentication object"""
+    """"Serializer for the user authentication object/Login"""
     email = serializers.CharField()
     password = serializers.CharField(
         style={'input_type': 'password'},
@@ -43,4 +44,28 @@ class AuthTokenSerializer(serializers.Serializer):
         return attrs     
 
 
-  
+
+
+# class UserAuthenticateSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = get_user_model()
+#         fields = ('id','name','email', 'password')
+#         extra_kwargs = {'password': {'write_only':True, 'min_length': 5}}
+
+#     def create(self, validated_data):
+#         """Create a new user with encrypted password and return it"""
+#         return get_user_model().objects.create_user(**validated_data)
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    """Serialize Booking"""
+
+
+    class Meta:
+        model = Booking
+        fields = ('id', 'date_time_field')
+        read_only_fields=('id',)
+
+        def create(self, data):
+            return Booking.objects.create(**data)

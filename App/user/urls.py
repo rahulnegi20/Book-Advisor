@@ -1,8 +1,8 @@
 from django.urls import path, include 
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from advisor import views 
-from user import views 
 from . import views 
 
 router = DefaultRouter()
@@ -15,9 +15,11 @@ app_name = 'user'
 
 
 urlpatterns = [
-    path('register/', views.CreateuserView.as_view(), name='register'),
-    path('login/', views.CreateTokenView.as_view(), name='token'),
+
+    path('login/', views.LoginAPIView.as_view(), name='token_obtain_pair'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('register/', views.CreateuserView.as_view()),
     path('<int:user_id>/', include(router.urls)),
- 
+    path('booking', views.BookingAPI.as_view())
 ]
 
