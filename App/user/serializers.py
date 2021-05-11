@@ -50,20 +50,17 @@ class AuthTokenSerializer(serializers.Serializer):
 class BookingSerializer(serializers.ModelSerializer):
     """Serialize Booking"""
 
-    # advisor = serializers.PrimaryKeyRelatedField(
-    #     many = False,
-    #     queryset = Advisor.objects.all()
-    # )
-    # user =  serializers.PrimaryKeyRelatedField(
-    #     many=False,
-    #     queryset = User.objects.all()
-    # )
-    date_time_field = serializers.DateTimeField()
-
+    bookingtime = serializers.DateTimeField()
+    user = serializers.CharField()
     class Meta:
-        model = Booking
-        fields = ('id','date_time_field')
+        model = Advisor 
+        fields = ('id','bookingtime','user',)
         read_only_fields=('id',)
+        extra_kwargs = {'bookingtime': {'write_only': True}}
 
-        def create(self, data):
-            return Booking.objects.create(**data)
+        # def update(self, attrs):
+        #     email = self.request.user.email 
+        #     bookingtime = attrs.get('bookingtime')
+        #     attrs['user'] = self.request.user 
+        #     return attrs
+        

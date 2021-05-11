@@ -19,17 +19,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view
+from .mixins import ReadWriteSerializerMixin
 
 
 class CreateuserView(generics.CreateAPIView):
     """Create a new user in the system"""
     serializer_class = UserSerializer
-
-
-# class CreateTokenView(ObtainAuthToken):
-#     """Create a new auth token for user"""
-#     serializer_class = AuthTokenSerializer
-#     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -63,34 +59,70 @@ class UserViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class AdvisorListViewSet(viewsets.ReadOnlyModelViewSet, mixins.ListModelMixin):
+class AdvisorListViewSet(ReadWriteSerializerMixin, generics.RetrieveUpdateAPIView, viewsets.ModelViewSet):
     """Lists the availabe advisors to the user"""
    # authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Advisor.objects.all()
-    serializer_class = AdvisorSerializer 
-    http_method_names = ['get', 'head']
-    #lookup_field = 'user_id'
-    #lookup_url_kwarg = 'pk'
+    #serializer_class = BookingSerializer 
+    read_serializer_class = BookingSerializer
+    write_serializer_class = AdvisorSerializer
+    http_method_names = ['get', 'head', 'post']
+    #lookup_field = 'bookingtime'
+    # lookup_url_kwarg = 'pk'
+
+    # def get_object(self):
+    #     #email = self.kwargs['user'] 
+    #     return get_object_or_404(Advisor.obje)
+
+    # def update(self, request, *args, **kwargs):
+    #     advisor = Advisor.objects.filter(pk=request)
+    #     return advisor.update(bookingtime='2021-05-10T19:09:28.332931Z')
+
+    # def get_queryset(self, **user_id):
+    #     """Return objects for the current authenticated user only"""
+    #     return self.queryset.order_by('id') 
+    
+    # def get_booking(self, request, data):
+    #     data = request.DATA 
+    #     id = self.request.user.id
+    #     queryset = Advisor.objects.filter(pk=id)
+    #     serializer = BookingSerializer(queryset, data=data, many=True, partial=True)
+    #     serializer.save()
+        
+
+# class AdvisorViewSet(viewsets.ViewSet, generics.RetrieveUpdateAPIView):
+
+#     permission_classes = (IsAuthenticated,)
+#     queryset = Advisor.objects.all()
+#     serializer_class = AdvisorSerializer 
 
 
-    def get_queryset(self, **user_id):
-        """Return objects for the current authenticated user only"""
-        return self.queryset.order_by('id') 
+#     def list(self, request):
+#         queryset = Advisor.objects.all()
+#         serializer = AdvisorSerializer(queryset, many=True)
+#         return Response(serializer.data)
 
-    def get_booking(self):
-        pass
+#     def retrieve(self, request, pk=None):
+#         queryset = Advisor.objects.all()
+#         user = get_object_or_404(queryset, pk=pk)
+#         serializer = BookingSerializer(user)
+#         return Response(serializer.data)
 
 
-class BookingAPIView(generics.CreateAPIView):
+
+
+
+class BookingAPIView(generics.RetrieveUpdateAPIView):
     serializer_class = BookingSerializer
     permission_classes = (IsAuthenticated,)
-    queryset = Booking.objects.all()
+    queryset = Advisor.objects.all()
 
     # def get_queryset(self, **pk):
     #     advisor_id = self.advisor.id
     #     return self.queryset.filter(pk=advisor_id)
 
-    def perform_create(self, serializer):
+    def perform_update(self, request, serializer):
         """save and post the data"""
-        serializer.save(user=self.request.user)
+        data = request.data
+        serializer.save(user=self.request.user, data=data, many=True)

@@ -54,6 +54,14 @@ class Advisor(models.Model):
     """Advisor object to be booked"""
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=advisor_image_file_path)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE,
+        default = "",
+        blank= True,
+        null=True
+    )
+    bookingtime = models.DateTimeField(auto_now_add=False,auto_now=False, null=True)
     
     def __str__(self):
         return self.name 
