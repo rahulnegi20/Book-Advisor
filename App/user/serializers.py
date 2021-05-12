@@ -7,6 +7,7 @@ from core.models import Booking, Advisor, User
 
 from advisor.serializers import AdvisorSerializer
 
+
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users object/Register"""
 
@@ -46,21 +47,23 @@ class AuthTokenSerializer(serializers.Serializer):
         return attrs     
 
 
-
 class BookingSerializer(serializers.ModelSerializer):
     """Serialize Booking"""
 
     bookingtime = serializers.DateTimeField()
-    user = serializers.CharField()
+    # user =  serializers.PrimaryKeyRelatedField(
+    #     many=True,
+    #     queryset = User.objects.filter(pk=14)
+    # )
     class Meta:
         model = Advisor 
         fields = ('id','bookingtime','user',)
         read_only_fields=('id',)
         extra_kwargs = {'bookingtime': {'write_only': True}}
 
-        # def update(self, attrs):
-        #     email = self.request.user.email 
-        #     bookingtime = attrs.get('bookingtime')
-        #     attrs['user'] = self.request.user 
-        #     return attrs
-        
+        # def update(self, instance, validated_data):
+        #     bookingtime_data = validated_data.pop('bookingtime')
+        #     Advisor.objects.create(post=instance, bookingtime=bookingtime)
+        #     print('This is instanfef',instance)
+        #     return super(BookingSerializer, self).update(instance, validated_data)
+

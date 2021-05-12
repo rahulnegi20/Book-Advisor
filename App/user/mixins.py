@@ -11,7 +11,7 @@ class ReadWriteSerializerMixin(object):
     write_serializer_class = None
 
     def get_serializer_class(self):        
-        if self.action in ["get", "create", "list","update", "partial_update", "destroy"]:
+        if self.action in [ "list","update", "partial_update", "destroy"]:
             return self.get_write_serializer_class()
         return self.get_read_serializer_class()
 
