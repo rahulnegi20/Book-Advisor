@@ -2,7 +2,6 @@ from rest_framework import serializers
 from core.models import Advisor
 
 
-
 class AdvisorSerializer(serializers.ModelSerializer):
     """Serializer for Advisor object"""
 

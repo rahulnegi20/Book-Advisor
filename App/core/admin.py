@@ -30,5 +30,11 @@ class AdvisorAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
 
 
+class BookingTimeAdmin(admin.ModelAdmin):
+    ordering = ['id']
+    list_display = ['id', 'booking_time',]
+    
+
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Advisor, AdvisorAdmin)
+admin.site.register(models.BookingTime, BookingTimeAdmin)

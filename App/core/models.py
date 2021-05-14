@@ -56,19 +56,25 @@ class Advisor(models.Model):
     image = models.ImageField(upload_to=advisor_image_file_path)
     
     def __str__(self):
-        return self.name 
+        return str(self.pk) 
 
-class Booking(models.Model):
+
+
+class BookingTime(models.Model):
     """Booking the Advisor"""
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete = models.CASCADE
-    )
     advisor = models.ForeignKey(
         Advisor,
-        on_delete = models.CASCADE
+        on_delete = models.CASCADE, null=False, blank=False
     )
-    date_time_field = models.DateTimeField(auto_now_add=True)
-
+    booking_time = models.DateTimeField(
+                            auto_now_add=False,
+                            auto_now=False,
+                            unique=True
+                            )
+    user = models.ForeignKey(
+                    User,
+                    on_delete = models.CASCADE, null=False, blank=False
+                    )
+    
     def __str__(self):
         return "{}".format(self.date_time_field)
