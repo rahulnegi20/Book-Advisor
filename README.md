@@ -54,6 +54,7 @@ link : https://bookadvisor123.herokuapp.com/user/user-id/advisor/
 
 link : https://bookadvisor123.herokuapp.com/user/user-id/advisor/booking 
 
+It returns (date-time-string) of your booking and the advisor details.
 
 ![img](https://i.imgur.com/bliXggi.png)
 
